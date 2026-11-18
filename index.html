@@ -3,75 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ОТМАЗКИНГ | Генератор оправданий</title>
+    <title>ОТМАЗКИНГ PRO | Генератор оправданий</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
         
         :root {
-            --bg: #08080a;
-            --panel: rgba(20, 20, 25, 0.85);
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #050508;
+            --panel: rgba(20, 20, 30, 0.75);
+            --border: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
             --text-muted: #8b8b9a;
             --accent: #ff2a5f;
-            --accent-glow: rgba(255, 42, 95, 0.3);
+            --accent-hover: #ff4775;
+            --accent-glow: rgba(255, 42, 95, 0.4);
             --green: #00ff88;
-            --green-glow: rgba(0, 255, 136, 0.2);
+            --green-glow: rgba(0, 255, 136, 0.3);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            display: flex; justify-content: center; align-items: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             min-height: 100vh; padding: 20px;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 42, 95, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Оживленный фон */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
         }
 
         .container {
-            width: 100%; max-width: 600px;
+            width: 100%; max-width: 650px;
             background: var(--panel);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.1);
             position: relative;
+            z-index: 10;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 30px;
         }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; margin-bottom: 30px; }
+        .header { text-align: center; margin-bottom: 30px; position: relative; }
         
         h1 {
-            font-size: 32px; font-weight: 900;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            font-size: 38px; font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #ff2a5f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px; text-transform: uppercase;
+            letter-spacing: -1.5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
-        .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; margin-top: 5px; }
+        .subtitle { color: var(--text-muted); font-size: 14px; font-weight: 600; letter-spacing: 1px; }
 
-        .form-group { margin-bottom: 20px; }
+        .counter-badge {
+            position: absolute; top: -10px; right: -10px;
+            background: rgba(255, 42, 95, 0.15); border: 1px solid var(--accent);
+            color: var(--accent); font-size: 11px; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .form-group { margin-bottom: 22px; }
         
         label {
-            display: block; font-size: 11px; color: var(--text-muted);
-            text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px; color: var(--text-muted);
+            text-transform: uppercase; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px;
         }
 
         .input-wrapper { position: relative; }
 
         select, input[type="text"] {
-            width: 100%; padding: 14px 18px;
+            width: 100%; padding: 16px 20px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
-            border-radius: 12px; color: var(--text); font-size: 15px; font-weight: 600;
+            border-radius: 14px; color: var(--text); font-size: 16px; font-weight: 600;
             outline: none; transition: all 0.3s ease;
             appearance: none;
         }
@@ -82,26 +102,33 @@
             box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
-        select option { background: #151520; color: var(--text); }
+        select option { background: #151520; color: var(--text); font-weight: 600; }
 
         .input-wrapper::after {
-            content: '▼'; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+            content: '▼'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
             color: var(--text-muted); font-size: 10px; pointer-events: none;
         }
 
+        .random-btn {
+            background: transparent; border: none; color: var(--accent);
+            font-size: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1px; opacity: 0.8; transition: 0.2s;
+        }
+        .random-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--accent); }
+
         .btn-generate {
-            width: 100%; padding: 18px;
+            width: 100%; padding: 22px;
             background: linear-gradient(135deg, var(--accent) 0%, #cc0033 100%);
-            color: #fff; border: none; border-radius: 12px;
-            font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;
+            color: #fff; border: none; border-radius: 16px;
+            font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
             cursor: pointer; transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--accent-glow);
+            box-shadow: 0 10px 25px var(--accent-glow);
             margin-top: 10px;
             position: relative; overflow: hidden;
         }
 
-        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 12px 25px var(--accent-glow); }
-        .btn-generate:active { transform: translateY(1px); }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 15px 35px var(--accent-glow); }
+        .btn-generate:active { transform: translateY(2px); box-shadow: 0 5px 15px var(--accent-glow); }
         .btn-generate:disabled { background: #222; color: #555; box-shadow: none; cursor: not-allowed; transform: none; }
 
         .btn-generate::before {
@@ -112,52 +139,103 @@
         .btn-generate:hover::before { left: 100%; }
 
         .result-box {
-            margin-top: 25px;
+            margin-top: 30px;
             background: rgba(0, 255, 136, 0.03);
             border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 16px; padding: 20px;
+            border-radius: 20px; padding: 25px;
             display: none;
-            box-shadow: 0 0 30px var(--green-glow);
+            position: relative;
+            box-shadow: 0 0 40px var(--green-glow);
         }
 
         .result-box.show { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
         .result-tag { 
-            display: inline-block; padding: 4px 10px; border-radius: 20px; 
+            display: inline-block; padding: 5px 12px; border-radius: 20px; 
             font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(255,255,255,0.1); color: var(--text-muted); margin-bottom: 12px;
+            background: rgba(0, 255, 136, 0.1); color: var(--green); margin-bottom: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
         }
 
         .result-text {
-            font-size: 17px; line-height: 1.6; color: #fff;
-            margin-bottom: 15px; font-weight: 500; font-style: italic;
+            font-size: 19px; line-height: 1.6; color: #fff;
+            margin-bottom: 20px; font-weight: 500;
+            font-style: italic;
         }
 
-        .result-actions { display: flex; justify-content: space-between; align-items: center; }
+        .result-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 
-        .btn-copy {
-            background: transparent; border: 1px solid var(--green); color: var(--green);
-            padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 800;
-            cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+        .action-btn {
+            flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px;
+            background: transparent; border: 1px solid var(--border); color: var(--text);
+            padding: 12px; border-radius: 10px; font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
+
+        .btn-copy { border-color: var(--green); color: var(--green); }
         .btn-copy:hover { background: var(--green); color: #000; }
         .btn-copy.copied { background: var(--green); color: #000; }
 
-        .btn-again {
-            background: transparent; border: none; color: var(--text-muted);
-            font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;
-        }
-        .btn-again:hover { color: var(--text); }
+        .btn-share { border-color: var(--accent); color: var(--accent); }
+        .btn-share:hover { background: var(--accent); color: #fff; }
 
+        .btn-again { border-color: var(--text-muted); color: var(--text-muted); }
+        .btn-again:hover { background: var(--text-muted); color: #000; }
+
+        /* Информация внизу */
+        .info-section {
+            width: 100%; max-width: 650px; text-align: center;
+            color: var(--text-muted); font-size: 12px; line-height: 1.6;
+            z-index: 10; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .info-badges {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;
+        }
+
+        .info-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+        }
+        .info-badge span { color: var(--accent); font-weight: 800; }
+
+        .disclaimer {
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            padding: 15px; border-radius: 12px; font-size: 11px;
+        }
+        .disclaimer strong { color: var(--text); }
+
+        /* Уведомление */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--green); color: #000; padding: 12px 24px;
+            border-radius: 12px; font-weight: 800; font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+            opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        @media (max-width: 600px) {
+            .container { padding: 25px; border-radius: 20px; }
+            h1 { font-size: 28px; }
+            .result-actions { flex-direction: column; }
+            .action-btn { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Оживленный фон -->
+    <canvas id="bg-canvas"></canvas>
+
     <div class="container">
         <div class="header">
+            <div class="counter-badge">Сгенерировано: <span id="counter">0</span></div>
             <h1>ОТМАЗКИНГ</h1>
-            <div class="subtitle">Генератор идеальных оправданий</div>
+            <div class="subtitle">Генератор оправданий, в которые поверят</div>
         </div>
 
         <div class="form-group">
@@ -174,7 +252,10 @@
         </div>
 
         <div class="form-group">
-            <label>Что натворил? (Кратко)</label>
+            <label>
+                Что натворил? (Кратко)
+                <button class="random-btn" onclick="randomReason()">🎲 Случайно</button>
+            </label>
             <input type="text" id="reason" placeholder="Опоздал, забыл, не сдал, проспал..." value="Опоздал на встречу">
         </div>
 
@@ -195,14 +276,31 @@
             <div class="result-tag" id="resultTag">Уровень: Дерзко</div>
             <div class="result-text" id="resultText">Текст отмазки...</div>
             <div class="result-actions">
-                <button class="btn-again" onclick="generate()">Ещё вариант</button>
-                <button class="btn-copy" id="copyBtn" onclick="copyText()">Скопировать</button>
+                <button class="action-btn btn-again" onclick="generate()">🔄 Ещё</button>
+                <button class="action-btn btn-share" onclick="shareText()">📤 Поделиться</button>
+                <button class="action-btn btn-copy" id="copyBtn" onclick="copyText()">📋 Копировать</button>
             </div>
         </div>
     </div>
 
+    <!-- Информация внизу -->
+    <div class="info-section">
+        <div class="info-badges">
+            <div class="info-badge">⚡ <span>75+</span> шаблонов</div>
+            <div class="info-badge">🎭 <span>5</span> ситуаций</div>
+            <div class="info-badge">🔥 <span>3</span> уровня наглости</div>
+        </div>
+        <div class="disclaimer">
+            <strong>ОТМАЗКИНГ</strong> — это юмористический инструмент. Мы не несем ответственности за разрушенные отношения, уволенные сотрудники и странные взгляды от учителей. Используйте с умом. 😉<br>
+            <span style="opacity: 0.5; font-size: 10px; display: block; margin-top: 8px;">Сделано с ❤️ и долей наглости.</span>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast">Скопировано в буфер!</div>
+
 <script>
-    // Расширенная база шаблонов
+    // --- Данные ---
     const templates = {
         boss: {
             1: [
@@ -321,6 +419,17 @@
         }
     };
 
+    const randomReasons = [
+        "Опоздал на встречу", "Забыл про день рождения", "Не сдал отчет", 
+        "Проспал будильник", "Потерял ключи", "Залип в телефоне",
+        "Застрял в пробке", "Уронил телефон в унитаз", "Сломался интернет",
+        "Кот разбил вазу", "Выпил лишнего", "Не успел купить подарок"
+    ];
+
+    let genCount = parseInt(localStorage.getItem('otmazking_count') || '0');
+    document.getElementById('counter').innerText = genCount;
+
+    // --- Генерация ---
     function generate() {
         const target = document.getElementById('target').value;
         const reasonInput = document.getElementById('reason').value.trim();
@@ -331,7 +440,7 @@
         const btn = document.getElementById('genBtn');
 
         if (!reasonInput) {
-            alert("Напиши, что натворил! (Кратко)");
+            showToast("Напиши, что натворил! (Кратко)");
             return;
         }
 
@@ -354,25 +463,143 @@
             btn.disabled = false;
             btn.innerText = "Сгенерировать отмазку";
 
+            // Счетчик
+            genCount++;
+            localStorage.setItem('otmazking_count', genCount);
+            document.getElementById('counter').innerText = genCount;
+
             resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 600); 
+        }, 500); 
+    }
+
+    // --- Утилиты ---
+    function randomReason() {
+        const input = document.getElementById('reason');
+        input.value = randomReasons[Math.floor(Math.random() * randomReasons.length)];
+        input.focus();
     }
 
     function copyText() {
         const text = document.getElementById('resultText').innerText;
         const btn = document.getElementById('copyBtn');
-        
         const cleanText = text.replace(/^«|»$/g, '');
 
         navigator.clipboard.writeText(cleanText).then(() => {
-            btn.innerText = "СКОПИРОВАНО!";
+            btn.innerText = "✅ Готово";
             btn.classList.add('copied');
+            showToast("Скопировано в буфер!");
             setTimeout(() => {
-                btn.innerText = "Скопировать";
+                btn.innerText = "📋 Копировать";
                 btn.classList.remove('copied');
             }, 2000);
         });
     }
+
+    function shareText() {
+        const text = document.getElementById('resultText').innerText;
+        const cleanText = text.replace(/^«|»$/g, '');
+        const shareData = {
+            title: 'ОТМАЗКИНГ',
+            text: `Моя отмазка: ${cleanText}`,
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => copyText());
+        } else {
+            copyText();
+            showToast("Текст скопирован! Отправь другу.");
+        }
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // --- Оживленный фон (Частицы) ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function initCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.5;
+            this.speedY = (Math.random() - 0.5) * 0.5;
+            this.opacity = Math.random() * 0.5 + 0.1;
+            this.color = Math.random() > 0.8 ? '#ff2a5f' : (Math.random() > 0.5 ? '#00ff88' : '#ffffff');
+        }
+
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x > width) this.x = 0;
+            if (this.x < 0) this.x = width;
+            if (this.y > height) this.y = 0;
+            if (this.y < 0) this.y = height;
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function createParticles() {
+        particles = [];
+        const count = Math.floor((width * height) / 15000);
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Легкое свечение за мышкой
+        if (mouse.x && mouse.y) {
+            const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
+            gradient.addColorStop(0, 'rgba(255, 42, 95, 0.05)');
+            gradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        initCanvas();
+        createParticles();
+    });
+
+    initCanvas();
+    createParticles();
+    animate();
 </script>
 </body>
     </html>
