@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОТМАЗКИНГ | Генератор оправданий</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        
+        :root {
+            --bg: #0a0a0f;
+            --panel: #151520;
+            --text: #fff;
+            --text-muted: #888;
+            --accent: #ff3366;
+            --accent-glow: rgba(255, 51, 102, 0.5);
+            --green: #00ff88;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #0a0a0f 70%);
+        }
+
+        .container {
+            width: 100%; max-width: 600px;
+            background: var(--panel);
+            border: 1px solid #2a2a3e;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 40px rgba(255, 51, 102, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 32px; font-weight: 900; text-align: center;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            text-align: center; color: var(--text-muted); font-size: 14px;
+            margin-bottom: 30px; font-weight: 700;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block; font-size: 12px; color: var(--text-muted);
+            text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px;
+        }
+
+        select, input[type="text"] {
+            width: 100%; padding: 15px;
+            background: rgba(0,0,0,0.3); border: 1px solid #2a2a3e;
+            border-radius: 10px; color: var(--text); font-size: 16px; font-weight: 700;
+            outline: none; transition: 0.3s;
+            appearance: none;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Стилизованный выпадающий список */
+        select option { background: var(--panel); color: var(--text); }
+
+        .btn-generate {
+            width: 100%; padding: 20px;
+            background: var(--accent); color: #fff;
+            border: none; border-radius: 10px;
+            font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; transition: 0.2s;
+            box-shadow: 0 5px 0 #990022, 0 10px 20px rgba(255, 51, 102, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-generate:active {
+            transform: translateY(5px); box-shadow: 0 0 0 #990022, 0 5px 10px rgba(255, 51, 102, 0.3);
+        }
+
+        .btn-generate:disabled {
+            background: #333; color: #666; box-shadow: none; cursor: not-allowed; transform: none;
+        }
+
+        /* Блок результата */
+        .result-box {
+            margin-top: 30px;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid var(--green);
+            border-radius: 10px; padding: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-box.show { display: block; }
+
+        .result-text {
+            font-size: 16px; line-height: 1.6; color: var(--text);
+            margin-bottom: 15px; font-weight: 400;
+            min-height: 60px;
+        }
+
+        .btn-copy {
+            background: transparent; border: 1px solid var(--green); color: var(--green);
+            padding: 8px 15px; border-radius: 5px; font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: 0.2s; float: right;
+        }
+        .btn-copy:hover { background: var(--green); color: #000; }
+        .btn-copy.copied { background: var(--green); color: #000; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Декор */
+        .decor-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="decor-line"></div>
+        <h1>ОТМАЗКИНГ</h1>
+        <div class="subtitle">Генератор оправданий, в которые поверят</div>
+
+        <div class="form-group">
+            <label>Кому ты врешь?</label>
+            <select id="target">
+                <option value="boss">Начальник / Работа</option>
+                <option value="teacher">Учитель / Универ</option>
+                <option value="partner">Девушка / Парень / Жена</option>
+                <option value="friend">Друзья / Тусовка</option>
+                <option value="parent">Родители</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Что случилось? (Кратко)</label>
+            <input type="text" id="reason" placeholder="Опоздал, не сдал, забыл, не приду..." value="Опоздал на встречу">
+        </div>
+
+        <div class="form-group">
+            <label>Уровень наглости</label>
+            <select id="level">
+                <option value="1">😇 Правдоподобно (Может прокатить)</option>
+                <option value="2" selected>😈 Дерзко (Есть шанс)</option>
+                <option value="3">💀 Абсурдно (Для смеха)</option>
+            </select>
+        </div>
+
+        <button class="btn-generate" id="genBtn" onclick="generate()">Сгенерировать отмазку</button>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-text" id="resultText">Текст отмазки...</div>
+            <button class="btn-copy" id="copyBtn" onclick="copyText()">КОПИРОВАТЬ</button>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+
+<script>
+    // База шаблонов (в будущем заменим на OpenAI)
+    const templates = {
+        boss: {
+            1: [
+                "Прошу прощения за опоздание, у меня произошла экстренная ситуация с [ПРИЧИНА]. Я уже решаю этот вопрос и скоро буду на месте.",
+                "К сожалению, я не успеваю из-за [ПРИЧИНА]. Я предупредил коллег и взял работу на дом, всё будет готово в срок."
+            ],
+            2: [
+                "Я застрял в пробке из-за [ПРИЧИНА]. Уже почти на месте, но, боюсь, мне понадобится еще 15 минут.",
+                "Мне пришлось срочно решать вопрос по поводу [ПРИЧИНА]. Это не было в планах, но я справляюсь."
+            ],
+            3: [
+                "Меня похитили инопланетяне, но я договорился с ними, что вернусь к обеду. Причина: [ПРИЧИНА].",
+                "Я случайно попал в параллельную вселенную из-за [ПРИЧИНА]. Выход ищу, к сожалению, там тоже пробки."
+            ]
+        },
+        teacher: {
+            1: [
+                "Извините, я не смог подготовиться вовремя из-за [ПРИЧИНА]. Могу я сдать работу завтра?",
+                "У меня возникли проблемы с [ПРИЧИНА]. Я обязательно исправлю ситуацию и принесу всё позже."
+            ],
+            2: [
+                "Я всю ночь разбирался с [ПРИЧИНА] и просто не успел физически. Можно продлить дедлайн?",
+                "Мой интернет пропал на весь вечер из-за [ПРИЧИНА], поэтому я не смог загрузить задание."
+            ],
+            3: [
+                "Мой кот съел не только домашку, но и мой ноутбук. Всё из-за [ПРИЧИНА].",
+                "Я был занят предотвращением глобального кризиса, связанного с [ПРИЧИНА]. Наука на первом месте."
+            ]
+        },
+        partner: {
+            1: [
+                "Прости, я задержался из-за [ПРИЧИНА]. Я уже еду и куплю твои любимые цветы.",
+                "У меня возникли внезапные дела с [ПРИЧИНА], но я освобожусь через час и весь вечер твой."
+            ],
+            2: [
+                "Я снова провожу время с [ПРИЧИНА]. Ты же понимаешь, это очень важно.",
+                "Я забыл про время, потому что решал проблему с [ПРИЧИНА]. Встретимся позже."
+            ],
+            3: [
+                "Я проиграл пари своему отражению в зеркале из-за [ПРИЧИНА], поэтому не смог прийти.",
+                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, ты гордишься мной."
+            ]
+        },
+        friend: {
+            1: [
+                "Сорян, я не смогу прийти из-за [ПРИЧИНА]. Обещаю, в следующий раз я с меня причитается.",
+                "Планы резко поменялись из-за [ПРИЧИНА]. Давай перенесем на завтра?"
+            ],
+            2: [
+                "Я залип с [ПРИЧИНА] и просто забил на всё. Сорян, брат.",
+                "Не приду, у меня внезапно появились дела важнее [ПРИЧИНА]."
+            ],
+            3: [
+                "Я стал свидетелем пришествия из-за [ПРИЧИНА]. Меня теперь зовут в новый мир.",
+                "У меня сгорел телефон из-за [ПРИЧИНА], а пока я его тушил, прошла неделя."
+            ]
+        },
+        parent: {
+            1: [
+                "Мам, пап, я задержусь из-за [ПРИЧИНА]. Я на связи, всё в порядке.",
+                "Не переживайте, я не смог приехать вовремя из-за [ПРИЧИНА], скоро буду."
+            ],
+            2: [
+                "Я просто потерял счет времени, пока разбирался с [ПРИЧИНА]. Вернусь позже.",
+                "У меня тут внезапные планы с [ПРИЧИНА]. Я предупрежу."
+            ],
+            3: [
+                "Я уехал в горы искать себя из-за [ПРИЧИНА]. Со мной все в порядке, не ждите.",
+                "Мне предложили стать президентом луны из-за [ПРИЧИНА]. Сейчас подумаю."
+            ]
+        }
+    };
+
+    function generate() {
+        const target = document.getElementById('target').value;
+        const reasonInput = document.getElementById('reason').value.trim();
+        const level = document.getElementById('level').value;
+        const resultBox = document.getElementById('resultBox');
+        const resultText = document.getElementById('resultText');
+        const btn = document.getElementById('genBtn');
+
+        if (!reasonInput) {
+            alert("Напиши, что случилось! (Кратко)");
+            return;
+        }
+
+        // Эффект загрузки
+        btn.disabled = true;
+        btn.innerText = "Анализируем реальность...";
+        
+        resultBox.classList.remove('show');
+
+        setTimeout(() => {
+            // Выбираем случайный шаблон
+            const levelTemplates = templates[target][level];
+            const randomTemplate = levelTemplates[Math.floor(Math.random() * levelTemplates.length)];
+            
+            // Подставляем причину
+            let finalText = randomTemplate.replace('[ПРИЧИНА]', reasonInput.toLowerCase());
+
+            // Здесь в будущем можно вызвать OpenAI API:
+            /*
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ВАШ_КЛЮЧ',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [{role: "user", content: `Придумай отмазку для ${target} на тему "${reasonInput}" с уровнем наглости ${level}`}]
+                })
+            })...
+            */
+
+            resultText.innerText = finalText;
+            resultBox.classList.add('show');
+            
+            btn.disabled = false;
+            btn.innerText = "Сгенерировать отмазку";
+        }, 800); // Имитация задержки сети
+    }
+
+    function copyText() {
+        const text = document.getElementById('resultText').innerText;
+        const btn = document.getElementById('copyBtn');
+        
+        navigator.clipboard.writeText(text).then(() => {
+            btn.innerText = "СКОПИРОВАНО!";
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerText = "КОПИРОВАТЬ";
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+</script>
+</body>
+</html>
