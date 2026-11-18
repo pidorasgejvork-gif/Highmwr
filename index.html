@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ОТМАЗКИНГ | Генератор оправданий</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
         
         :root {
-            --bg: #0a0a0f;
-            --panel: #151520;
-            --text: #fff;
-            --text-muted: #888;
-            --accent: #ff3366;
-            --accent-glow: rgba(255, 51, 102, 0.5);
+            --bg: #08080a;
+            --panel: rgba(20, 20, 25, 0.85);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --text-muted: #8b8b9a;
+            --accent: #ff2a5f;
+            --accent-glow: rgba(255, 42, 95, 0.3);
             --green: #00ff88;
+            --green-glow: rgba(0, 255, 136, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
@@ -24,221 +26,297 @@
             color: var(--text);
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; padding: 20px;
-            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #0a0a0f 70%);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 42, 95, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
         .container {
             width: 100%; max-width: 600px;
             background: var(--panel);
-            border: 1px solid #2a2a3e;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 40px rgba(255, 51, 102, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05);
             position: relative;
-            overflow: hidden;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        
         h1 {
-            font-size: 32px; font-weight: 900; text-align: center;
-            color: var(--accent);
-            text-shadow: 0 0 20px var(--accent-glow);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-size: 32px; font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px; text-transform: uppercase;
         }
 
-        .subtitle {
-            text-align: center; color: var(--text-muted); font-size: 14px;
-            margin-bottom: 30px; font-weight: 700;
-        }
+        .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 600; letter-spacing: 1px; margin-top: 5px; }
 
         .form-group { margin-bottom: 20px; }
+        
         label {
-            display: block; font-size: 12px; color: var(--text-muted);
-            text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px;
+            display: block; font-size: 11px; color: var(--text-muted);
+            text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px;
         }
 
+        .input-wrapper { position: relative; }
+
         select, input[type="text"] {
-            width: 100%; padding: 15px;
-            background: rgba(0,0,0,0.3); border: 1px solid #2a2a3e;
-            border-radius: 10px; color: var(--text); font-size: 16px; font-weight: 700;
-            outline: none; transition: 0.3s;
+            width: 100%; padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px; color: var(--text); font-size: 15px; font-weight: 600;
+            outline: none; transition: all 0.3s ease;
             appearance: none;
         }
 
         select:focus, input[type="text"]:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: rgba(255, 42, 95, 0.05);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
-        /* Стилизованный выпадающий список */
-        select option { background: var(--panel); color: var(--text); }
+        select option { background: #151520; color: var(--text); }
+
+        .input-wrapper::after {
+            content: '▼'; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); font-size: 10px; pointer-events: none;
+        }
 
         .btn-generate {
-            width: 100%; padding: 20px;
-            background: var(--accent); color: #fff;
-            border: none; border-radius: 10px;
-            font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
-            cursor: pointer; transition: 0.2s;
-            box-shadow: 0 5px 0 #990022, 0 10px 20px rgba(255, 51, 102, 0.3);
+            width: 100%; padding: 18px;
+            background: linear-gradient(135deg, var(--accent) 0%, #cc0033 100%);
+            color: #fff; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 8px 20px var(--accent-glow);
             margin-top: 10px;
+            position: relative; overflow: hidden;
         }
 
-        .btn-generate:active {
-            transform: translateY(5px); box-shadow: 0 0 0 #990022, 0 5px 10px rgba(255, 51, 102, 0.3);
-        }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 12px 25px var(--accent-glow); }
+        .btn-generate:active { transform: translateY(1px); }
+        .btn-generate:disabled { background: #222; color: #555; box-shadow: none; cursor: not-allowed; transform: none; }
 
-        .btn-generate:disabled {
-            background: #333; color: #666; box-shadow: none; cursor: not-allowed; transform: none;
+        .btn-generate::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
+        .btn-generate:hover::before { left: 100%; }
 
-        /* Блок результата */
         .result-box {
-            margin-top: 30px;
-            background: rgba(0, 255, 136, 0.05);
-            border: 1px solid var(--green);
-            border-radius: 10px; padding: 20px;
+            margin-top: 25px;
+            background: rgba(0, 255, 136, 0.03);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 16px; padding: 20px;
             display: none;
-            animation: fadeIn 0.5s ease;
+            box-shadow: 0 0 30px var(--green-glow);
         }
 
-        .result-box.show { display: block; }
+        .result-box.show { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .result-tag { 
+            display: inline-block; padding: 4px 10px; border-radius: 20px; 
+            font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(255,255,255,0.1); color: var(--text-muted); margin-bottom: 12px;
+        }
 
         .result-text {
-            font-size: 16px; line-height: 1.6; color: var(--text);
-            margin-bottom: 15px; font-weight: 400;
-            min-height: 60px;
+            font-size: 17px; line-height: 1.6; color: #fff;
+            margin-bottom: 15px; font-weight: 500; font-style: italic;
         }
+
+        .result-actions { display: flex; justify-content: space-between; align-items: center; }
 
         .btn-copy {
             background: transparent; border: 1px solid var(--green); color: var(--green);
-            padding: 8px 15px; border-radius: 5px; font-size: 12px; font-weight: 700;
-            cursor: pointer; transition: 0.2s; float: right;
+            padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 800;
+            cursor: pointer; transition: all 0.2s; text-transform: uppercase;
         }
         .btn-copy:hover { background: var(--green); color: #000; }
         .btn-copy.copied { background: var(--green); color: #000; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Декор */
-        .decor-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        .btn-again {
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;
         }
+        .btn-again:hover { color: var(--text); }
+
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="decor-line"></div>
-        <h1>ОТМАЗКИНГ</h1>
-        <div class="subtitle">Генератор оправданий, в которые поверят</div>
-
-        <div class="form-group">
-            <label>Кому ты врешь?</label>
-            <select id="target">
-                <option value="boss">Начальник / Работа</option>
-                <option value="teacher">Учитель / Универ</option>
-                <option value="partner">Девушка / Парень / Жена</option>
-                <option value="friend">Друзья / Тусовка</option>
-                <option value="parent">Родители</option>
-            </select>
+        <div class="header">
+            <h1>ОТМАЗКИНГ</h1>
+            <div class="subtitle">Генератор идеальных оправданий</div>
         </div>
 
         <div class="form-group">
-            <label>Что случилось? (Кратко)</label>
-            <input type="text" id="reason" placeholder="Опоздал, не сдал, забыл, не приду..." value="Опоздал на встречу">
+            <label>Кому ты врешь?</label>
+            <div class="input-wrapper">
+                <select id="target">
+                    <option value="boss">👔 Начальник / Работа</option>
+                    <option value="teacher">🎓 Учитель / Универ</option>
+                    <option value="partner">💔 Партнер / Вторая половинка</option>
+                    <option value="friend">🍻 Друзья / Тусовка</option>
+                    <option value="parent">👨‍👩‍👦 Родители</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Что натворил? (Кратко)</label>
+            <input type="text" id="reason" placeholder="Опоздал, забыл, не сдал, проспал..." value="Опоздал на встречу">
         </div>
 
         <div class="form-group">
             <label>Уровень наглости</label>
-            <select id="level">
-                <option value="1">😇 Правдоподобно (Может прокатить)</option>
-                <option value="2" selected>😈 Дерзко (Есть шанс)</option>
-                <option value="3">💀 Абсурдно (Для смеха)</option>
-            </select>
+            <div class="input-wrapper">
+                <select id="level">
+                    <option value="1">😇 Правдоподобно (Может прокатить)</option>
+                    <option value="2" selected>😈 Дерзко (Есть шанс)</option>
+                    <option value="3">💀 Абсурдно (Для смеха)</option>
+                </select>
+            </div>
         </div>
 
         <button class="btn-generate" id="genBtn" onclick="generate()">Сгенерировать отмазку</button>
 
         <div class="result-box" id="resultBox">
+            <div class="result-tag" id="resultTag">Уровень: Дерзко</div>
             <div class="result-text" id="resultText">Текст отмазки...</div>
-            <button class="btn-copy" id="copyBtn" onclick="copyText()">КОПИРОВАТЬ</button>
-            <div style="clear:both;"></div>
+            <div class="result-actions">
+                <button class="btn-again" onclick="generate()">Ещё вариант</button>
+                <button class="btn-copy" id="copyBtn" onclick="copyText()">Скопировать</button>
+            </div>
         </div>
     </div>
 
 <script>
-    // База шаблонов (в будущем заменим на OpenAI)
+    // Расширенная база шаблонов
     const templates = {
         boss: {
             1: [
-                "Прошу прощения за опоздание, у меня произошла экстренная ситуация с [ПРИЧИНА]. Я уже решаю этот вопрос и скоро буду на месте.",
-                "К сожалению, я не успеваю из-за [ПРИЧИНА]. Я предупредил коллег и взял работу на дом, всё будет готово в срок."
+                "Прошу прощения за опоздание. У меня возникла экстренная ситуация, связанная с [ПРИЧИНА]. Я уже на месте и готов приступить к работе.",
+                "К сожалению, я не успеваю вовремя из-за [ПРИЧИНА]. Я предупредил коллег и взял задачу на дом. Всё будет готово в срок.",
+                "Добрый день. Из-за [ПРИЧИНА] я вынужден задержаться. Приношу извинения за неудобства, буду через 15 минут.",
+                "Внезапно возникли проблемы с [ПРИЧИНА]. Я решаю их в ускоренном режиме, но, к сожалению, не успеваю к началу.",
+                "Вынужден сообщить, что из-за [ПРИЧИНА] я не смогу присутствовать лично. Я на связи и готов работать удаленно."
             ],
             2: [
-                "Я застрял в пробке из-за [ПРИЧИНА]. Уже почти на месте, но, боюсь, мне понадобится еще 15 минут.",
-                "Мне пришлось срочно решать вопрос по поводу [ПРИЧИНА]. Это не было в планах, но я справляюсь."
+                "Я застрял в пробке из-за [ПРИЧИНА]. Уже почти на месте, но, боюсь, мне понадобится еще полчаса.",
+                "Мне пришлось срочно решать вопрос по поводу [ПРИЧИНА]. Это не было в планах, поэтому я задерживаюсь.",
+                "Я не смог вовремя выйти, потому что разбирался с [ПРИЧИНА]. Это важнее, чем казалось изначально.",
+                "К сожалению, я не смогу прийти вовремя. У меня форс-мажор с [ПРИЧИНА]. Постараюсь подключиться удаленно.",
+                "У меня случился коллапс из-за [ПРИЧИНА]. Я пытаюсь всё уладить, но время летит незаметно."
             ],
             3: [
                 "Меня похитили инопланетяне, но я договорился с ними, что вернусь к обеду. Причина: [ПРИЧИНА].",
-                "Я случайно попал в параллельную вселенную из-за [ПРИЧИНА]. Выход ищу, к сожалению, там тоже пробки."
+                "Я случайно попал в параллельную вселенную из-за [ПРИЧИНА]. Выход ищу, но там тоже пробки.",
+                "Мой кот научился открывать ноутбук и удалил мою презентацию. Всё из-за [ПРИЧИНА]. Я пытаюсь восстановить данные.",
+                "Я застрял в лифте с [ПРИЧИНА]. Пожарные уже едут, но я, кажется, успею на обед.",
+                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, вы понимаете, что это важнее отчета."
             ]
         },
         teacher: {
             1: [
-                "Извините, я не смог подготовиться вовремя из-за [ПРИЧИНА]. Могу я сдать работу завтра?",
-                "У меня возникли проблемы с [ПРИЧИНА]. Я обязательно исправлю ситуацию и принесу всё позже."
+                "Извините, я не смог подготовиться вовремя из-за [ПРИЧИНА]. Могу я сдать работу завтра? Обещаю, что всё будет идеально.",
+                "У меня возникли проблемы с [ПРИЧИНА]. Я обязательно исправлю ситуацию и принесу всё позже.",
+                "Прошу прощения, но из-за [ПРИЧИНА] я не успеваю. Я уже работаю над этим и готов показать черновик.",
+                "Я столкнулся с непредвиденными обстоятельствами ([ПРИЧИНА]). Можно ли продлить срок сдачи на один день?",
+                "К сожалению, из-за [ПРИЧИНА] я не смог завершить задание. Я готов обсудить это лично после занятия."
             ],
             2: [
                 "Я всю ночь разбирался с [ПРИЧИНА] и просто не успел физически. Можно продлить дедлайн?",
-                "Мой интернет пропал на весь вечер из-за [ПРИЧИНА], поэтому я не смог загрузить задание."
+                "Мой интернет пропал на весь вечер из-за [ПРИЧИНА], поэтому я не смог загрузить задание.",
+                "Я был занят [ПРИЧИНА], и это заняло больше времени, чем я думал. Работа почти готова, но не совсем.",
+                "У меня возникли технические неполадки из-за [ПРИЧИНА]. Файл не сохранился, а резервной копии нет.",
+                "Мне пришлось разбираться с [ПРИЧИНА] вместо учебы. Надеюсь на ваше понимание."
             ],
             3: [
                 "Мой кот съел не только домашку, но и мой ноутбук. Всё из-за [ПРИЧИНА].",
-                "Я был занят предотвращением глобального кризиса, связанного с [ПРИЧИНА]. Наука на первом месте."
+                "Я был занят предотвращением глобального кризиса, связанного с [ПРИЧИНА]. Наука на первом месте.",
+                "Я случайно удалил файл, пытаясь спасти систему от [ПРИЧИНА]. Восстановление займет время.",
+                "Меня не было, потому что я участвовал в секретном эксперименте с [ПРИЧИНА]. Подробности не разглашаются.",
+                "Я нашел портал в другое измерение из-за [ПРИЧИНА]. Теперь я изучаю квантовую физику на практике."
             ]
         },
         partner: {
             1: [
                 "Прости, я задержался из-за [ПРИЧИНА]. Я уже еду и куплю твои любимые цветы.",
-                "У меня возникли внезапные дела с [ПРИЧИНА], но я освобожусь через час и весь вечер твой."
+                "У меня возникли внезапные дела с [ПРИЧИНА], но я освобожусь через час и весь вечер твой.",
+                "Любимая(ый), я не успеваю из-за [ПРИЧИНА]. Давай перенесем ужин на завтра? Я всё компенсирую.",
+                "Прости за задержку, у меня была проблема с [ПРИЧИНА]. Я скоро буду и всё объясню.",
+                "Я очень хотел прийти, но из-за [ПРИЧИНА] планы сорвались. Давай встретимся завтра."
             ],
             2: [
-                "Я снова провожу время с [ПРИЧИНА]. Ты же понимаешь, это очень важно.",
-                "Я забыл про время, потому что решал проблему с [ПРИЧИНА]. Встретимся позже."
+                "Я задержался, потому что решал вопрос с [ПРИЧИНА]. Это было неожиданно, но я уже бегу к тебе.",
+                "Я забыл про время, потому что меня затянуло [ПРИЧИНА]. Давай встретимся позже, я извинюсь лично.",
+                "У меня был тяжелый день из-за [ПРИЧИНА]. Мне нужно немного времени, чтобы прийти в себя. Увидимся позже.",
+                "Сорян, я залип с [ПРИЧИНА]. Я знаю, что обещал, но планы изменились.",
+                "Я пытался всё успеть, но [ПРИЧИНА] съела всё мое время. Перенесем нашу встречу?"
             ],
             3: [
                 "Я проиграл пари своему отражению в зеркале из-за [ПРИЧИНА], поэтому не смог прийти.",
-                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, ты гордишься мной."
+                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, ты гордишься мной.",
+                "Я случайно телепортировался в прошлое, чтобы исправить [ПРИЧИНА]. Вернусь к ужину.",
+                "Мой телефон взорвался, когда я пытался решить проблему с [ПРИЧИНА]. Я жив, но без связи.",
+                "Меня похитили инопланетяне, чтобы изучить [ПРИЧИНА]. Они обещали вернуть меня к утру."
             ]
         },
         friend: {
             1: [
-                "Сорян, я не смогу прийти из-за [ПРИЧИНА]. Обещаю, в следующий раз я с меня причитается.",
-                "Планы резко поменялись из-за [ПРИЧИНА]. Давай перенесем на завтра?"
+                "Сорян, я не смогу прийти из-за [ПРИЧИНА]. Обещаю, в следующий раз с меня причитается.",
+                "Планы резко поменялись из-за [ПРИЧИНА]. Давай перенесем на завтра?",
+                "Я не успеваю, у меня внезапно появились дела с [ПРИЧИНА]. Позже наберу.",
+                "Чувак, извини, но из-за [ПРИЧИНА] я вынужден пропустить тусовку. Обязательно наверстаем.",
+                "У меня нарисовалась проблема с [ПРИЧИНА]. Я выпадаю из графика, но скоро вернусь."
             ],
             2: [
                 "Я залип с [ПРИЧИНА] и просто забил на всё. Сорян, брат.",
-                "Не приду, у меня внезапно появились дела важнее [ПРИЧИНА]."
+                "Не приду, у меня внезапно появились дела важнее [ПРИЧИНА].",
+                "Я сегодня пас, устал после [ПРИЧИНА]. Давай в другой раз.",
+                "Меня засосало в водоворот [ПРИЧИНА]. Я не выберусь сегодня.",
+                "Планы накрылись медным тазом из-за [ПРИЧИНА]. Я в пролете, но вы там отдохните за меня."
             ],
             3: [
                 "Я стал свидетелем пришествия из-за [ПРИЧИНА]. Меня теперь зовут в новый мир.",
-                "У меня сгорел телефон из-за [ПРИЧИНА], а пока я его тушил, прошла неделя."
+                "У меня сгорел телефон из-за [ПРИЧИНА], а пока я его тушил, прошла неделя.",
+                "Я нашел портал в Нарнию, пока разбирался с [ПРИЧИНА]. Останусь тут на пару дней.",
+                "Меня похитили пираты, но я сбежал. Всё из-за [ПРИЧИНА]. Скоро буду.",
+                "Я стал супергероем, моя суперсила — [ПРИЧИНА]. Сейчас спасаю город, так что не ждите."
             ]
         },
         parent: {
             1: [
                 "Мам, пап, я задержусь из-за [ПРИЧИНА]. Я на связи, всё в порядке.",
-                "Не переживайте, я не смог приехать вовремя из-за [ПРИЧИНА], скоро буду."
+                "Не переживайте, я не смог приехать вовремя из-за [ПРИЧИНА], скоро буду.",
+                "Простите, что не предупредил. У меня возникли дела с [ПРИЧИНА]. Приеду позже.",
+                "У меня всё хорошо, просто задерживаюсь из-за [ПРИЧИНА]. Не волнуйтесь.",
+                "Из-за [ПРИЧИНА] я не успеваю к ужину. Обещаю приехать завтра."
             ],
             2: [
                 "Я просто потерял счет времени, пока разбирался с [ПРИЧИНА]. Вернусь позже.",
-                "У меня тут внезапные планы с [ПРИЧИНА]. Я предупрежу."
+                "У меня тут внезапные планы с [ПРИЧИНА]. Я предупрежу, когда освобожусь.",
+                "Я не приеду сегодня, у меня дела с [ПРИЧИНА]. Завтра обязательно наберу.",
+                "Я застрял с [ПРИЧИНА], поэтому не успеваю. Всё под контролем.",
+                "У меня изменились планы из-за [ПРИЧИНА]. Я приеду, как только смогу."
             ],
             3: [
                 "Я уехал в горы искать себя из-за [ПРИЧИНА]. Со мной все в порядке, не ждите.",
-                "Мне предложили стать президентом луны из-за [ПРИЧИНА]. Сейчас подумаю."
+                "Мне предложили стать президентом луны из-за [ПРИЧИНА]. Сейчас подумаю.",
+                "Я нашел клад, пока разбирался с [ПРИЧИНА]. Теперь я богат и не приеду.",
+                "Я стал свидетелем НЛО, когда решал вопрос с [ПРИЧИНА]. Меня изучают.",
+                "Я решил стать монахом из-за [ПРИЧИНА]. Теперь живу в пещере и медитирую."
             ]
         }
     };
@@ -249,63 +327,52 @@
         const level = document.getElementById('level').value;
         const resultBox = document.getElementById('resultBox');
         const resultText = document.getElementById('resultText');
+        const resultTag = document.getElementById('resultTag');
         const btn = document.getElementById('genBtn');
 
         if (!reasonInput) {
-            alert("Напиши, что случилось! (Кратко)");
+            alert("Напиши, что натворил! (Кратко)");
             return;
         }
 
-        // Эффект загрузки
         btn.disabled = true;
         btn.innerText = "Анализируем реальность...";
-        
         resultBox.classList.remove('show');
 
+        const levelNames = { "1": "Правдоподобно", "2": "Дерзко", "3": "Абсурдно" };
+        resultTag.innerText = "Уровень: " + levelNames[level];
+
         setTimeout(() => {
-            // Выбираем случайный шаблон
             const levelTemplates = templates[target][level];
             const randomTemplate = levelTemplates[Math.floor(Math.random() * levelTemplates.length)];
             
-            // Подставляем причину
             let finalText = randomTemplate.replace('[ПРИЧИНА]', reasonInput.toLowerCase());
 
-            // Здесь в будущем можно вызвать OpenAI API:
-            /*
-            fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ВАШ_КЛЮЧ',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [{role: "user", content: `Придумай отмазку для ${target} на тему "${reasonInput}" с уровнем наглости ${level}`}]
-                })
-            })...
-            */
-
-            resultText.innerText = finalText;
+            resultText.innerText = `«${finalText}»`;
             resultBox.classList.add('show');
             
             btn.disabled = false;
             btn.innerText = "Сгенерировать отмазку";
-        }, 800); // Имитация задержки сети
+
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 600); 
     }
 
     function copyText() {
         const text = document.getElementById('resultText').innerText;
         const btn = document.getElementById('copyBtn');
         
-        navigator.clipboard.writeText(text).then(() => {
+        const cleanText = text.replace(/^«|»$/g, '');
+
+        navigator.clipboard.writeText(cleanText).then(() => {
             btn.innerText = "СКОПИРОВАНО!";
             btn.classList.add('copied');
             setTimeout(() => {
-                btn.innerText = "КОПИРОВАТЬ";
+                btn.innerText = "Скопировать";
                 btn.classList.remove('copied');
             }, 2000);
         });
     }
 </script>
 </body>
-</html>
+    </html>
