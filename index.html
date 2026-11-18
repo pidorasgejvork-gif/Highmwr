@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ОТМАЗКИНГ PRO | Генератор оправданий</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
@@ -26,72 +26,71 @@
             background-color: var(--bg);
             color: var(--text);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 20px;
+            min-height: 100vh; padding: 20px 15px;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Оживленный фон */
         #bg-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; pointer-events: none;
         }
 
         .container {
-            width: 100%; max-width: 650px;
+            width: 100%; max-width: 600px;
             background: var(--panel);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 30px 20px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.1);
             position: relative;
             z-index: 10;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; margin-bottom: 30px; position: relative; }
+        .header { text-align: center; margin-bottom: 25px; position: relative; }
         
         h1 {
-            font-size: 38px; font-weight: 900;
+            font-size: 32px; font-weight: 900;
             background: linear-gradient(135deg, #fff 0%, #ff2a5f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1.5px;
-            margin-bottom: 8px;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
             text-transform: uppercase;
         }
 
-        .subtitle { color: var(--text-muted); font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+        .subtitle { color: var(--text-muted); font-size: 12px; font-weight: 600; letter-spacing: 1px; }
 
         .counter-badge {
-            position: absolute; top: -10px; right: -10px;
+            position: absolute; top: -15px; right: 0;
             background: rgba(255, 42, 95, 0.15); border: 1px solid var(--accent);
-            color: var(--accent); font-size: 11px; font-weight: 800;
+            color: var(--accent); font-size: 10px; font-weight: 800;
             padding: 4px 10px; border-radius: 20px;
             text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .form-group { margin-bottom: 22px; }
+        .form-group { margin-bottom: 18px; }
         
         label {
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 12px; color: var(--text-muted);
-            text-transform: uppercase; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px;
+            font-size: 11px; color: var(--text-muted);
+            text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px;
         }
 
         .input-wrapper { position: relative; }
 
         select, input[type="text"] {
-            width: 100%; padding: 16px 20px;
+            width: 100%; padding: 16px 18px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
-            border-radius: 14px; color: var(--text); font-size: 16px; font-weight: 600;
+            border-radius: 12px; color: var(--text); font-size: 15px; font-weight: 600;
             outline: none; transition: all 0.3s ease;
             appearance: none;
         }
@@ -102,10 +101,15 @@
             box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
+        /* Фикс для мобилок: убираем обрезание текста в селекте */
+        select {
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
         select option { background: #151520; color: var(--text); font-weight: 600; }
 
         .input-wrapper::after {
-            content: '▼'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            content: '▼'; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
             color: var(--text-muted); font-size: 10px; pointer-events: none;
         }
 
@@ -117,13 +121,13 @@
         .random-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--accent); }
 
         .btn-generate {
-            width: 100%; padding: 22px;
+            width: 100%; padding: 20px;
             background: linear-gradient(135deg, var(--accent) 0%, #cc0033 100%);
-            color: #fff; border: none; border-radius: 16px;
-            font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+            color: #fff; border: none; border-radius: 14px;
+            font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
             cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 10px 25px var(--accent-glow);
-            margin-top: 10px;
+            margin-top: 5px;
             position: relative; overflow: hidden;
         }
 
@@ -139,10 +143,10 @@
         .btn-generate:hover::before { left: 100%; }
 
         .result-box {
-            margin-top: 30px;
+            margin-top: 25px;
             background: rgba(0, 255, 136, 0.03);
             border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 20px; padding: 25px;
+            border-radius: 16px; padding: 20px;
             display: none;
             position: relative;
             box-shadow: 0 0 40px var(--green-glow);
@@ -154,22 +158,22 @@
         .result-tag { 
             display: inline-block; padding: 5px 12px; border-radius: 20px; 
             font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0, 255, 136, 0.1); color: var(--green); margin-bottom: 15px;
+            background: rgba(0, 255, 136, 0.1); color: var(--green); margin-bottom: 12px;
             border: 1px solid rgba(0, 255, 136, 0.2);
         }
 
         .result-text {
-            font-size: 19px; line-height: 1.6; color: #fff;
+            font-size: 17px; line-height: 1.5; color: #fff;
             margin-bottom: 20px; font-weight: 500;
             font-style: italic;
         }
 
-        .result-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .result-actions { display: flex; flex-direction: column; gap: 8px; }
 
         .action-btn {
-            flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px;
+            width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
             background: transparent; border: 1px solid var(--border); color: var(--text);
-            padding: 12px; border-radius: 10px; font-size: 12px; font-weight: 800;
+            padding: 14px; border-radius: 10px; font-size: 12px; font-weight: 800;
             cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
 
@@ -183,59 +187,54 @@
         .btn-again { border-color: var(--text-muted); color: var(--text-muted); }
         .btn-again:hover { background: var(--text-muted); color: #000; }
 
-        /* Информация внизу */
         .info-section {
-            width: 100%; max-width: 650px; text-align: center;
-            color: var(--text-muted); font-size: 12px; line-height: 1.6;
+            width: 100%; max-width: 600px; text-align: center;
+            color: var(--text-muted); font-size: 11px; line-height: 1.5;
             z-index: 10; animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .info-badges {
-            display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;
+            display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
         }
 
         .info-badge {
-            display: flex; align-items: center; gap: 6px;
+            display: flex; align-items: center; gap: 4px;
             background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+            padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 600;
         }
         .info-badge span { color: var(--accent); font-weight: 800; }
 
         .disclaimer {
             background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-            padding: 15px; border-radius: 12px; font-size: 11px;
+            padding: 12px; border-radius: 12px;
         }
         .disclaimer strong { color: var(--text); }
 
-        /* Уведомление */
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: var(--green); color: #000; padding: 12px 24px;
-            border-radius: 12px; font-weight: 800; font-size: 14px;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--green); color: #000; padding: 12px 20px;
+            border-radius: 10px; font-weight: 800; font-size: 13px;
             box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
             opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
+            z-index: 1000; text-align: center; width: 90%; max-width: 300px;
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        @media (max-width: 600px) {
-            .container { padding: 25px; border-radius: 20px; }
-            h1 { font-size: 28px; }
-            .result-actions { flex-direction: column; }
-            .action-btn { width: 100%; }
+        @media (min-width: 480px) {
+            .result-actions { flex-direction: row; }
+            .action-btn { flex: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Оживленный фон -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
         <div class="header">
             <div class="counter-badge">Сгенерировано: <span id="counter">0</span></div>
             <h1>ОТМАЗКИНГ</h1>
-            <div class="subtitle">Генератор оправданий, в которые поверят</div>
+            <div class="subtitle">Генератор оправданий</div>
         </div>
 
         <div class="form-group">
@@ -253,24 +252,24 @@
 
         <div class="form-group">
             <label>
-                Что натворил? (Кратко)
-                <button class="random-btn" onclick="randomReason()">🎲 Случайно</button>
+                Что случилось?
+                <button class="random-btn" onclick="randomReason()">🎲 Рандом</button>
             </label>
-            <input type="text" id="reason" placeholder="Опоздал, забыл, не сдал, проспал..." value="Опоздал на встречу">
+            <input type="text" id="reason" placeholder="Опоздал, пробка, проспал..." value="Проспал будильник">
         </div>
 
         <div class="form-group">
             <label>Уровень наглости</label>
             <div class="input-wrapper">
                 <select id="level">
-                    <option value="1">😇 Правдоподобно (Может прокатить)</option>
-                    <option value="2" selected>😈 Дерзко (Есть шанс)</option>
-                    <option value="3">💀 Абсурдно (Для смеха)</option>
+                    <option value="1">😇 Правдоподобно</option>
+                    <option value="2" selected>😈 Дерзко</option>
+                    <option value="3">💀 Абсурдно</option>
                 </select>
             </div>
         </div>
 
-        <button class="btn-generate" id="genBtn" onclick="generate()">Сгенерировать отмазку</button>
+        <button class="btn-generate" id="genBtn" onclick="generate()">Сгенерировать</button>
 
         <div class="result-box" id="resultBox">
             <div class="result-tag" id="resultTag">Уровень: Дерзко</div>
@@ -283,138 +282,134 @@
         </div>
     </div>
 
-    <!-- Информация внизу -->
     <div class="info-section">
         <div class="info-badges">
-            <div class="info-badge">⚡ <span>75+</span> шаблонов</div>
+            <div class="info-badge">⚡ <span>75+</span> фраз</div>
             <div class="info-badge">🎭 <span>5</span> ситуаций</div>
-            <div class="info-badge">🔥 <span>3</span> уровня наглости</div>
         </div>
         <div class="disclaimer">
-            <strong>ОТМАЗКИНГ</strong> — это юмористический инструмент. Мы не несем ответственности за разрушенные отношения, уволенные сотрудники и странные взгляды от учителей. Используйте с умом. 😉<br>
-            <span style="opacity: 0.5; font-size: 10px; display: block; margin-top: 8px;">Сделано с ❤️ и долей наглости.</span>
+            <strong>ОТМАЗКИНГ</strong> — юмористический инструмент. Не несем ответственности за разрушенные отношения и косые взгляды. 😉
         </div>
     </div>
 
-    <!-- Уведомление -->
-    <div class="toast" id="toast">Скопировано в буфер!</div>
+    <div class="toast" id="toast">Скопировано!</div>
 
 <script>
-    // --- Данные ---
+    // Умная база данных
     const templates = {
         boss: {
             1: [
-                "Прошу прощения за опоздание. У меня возникла экстренная ситуация, связанная с [ПРИЧИНА]. Я уже на месте и готов приступить к работе.",
-                "К сожалению, я не успеваю вовремя из-за [ПРИЧИНА]. Я предупредил коллег и взял задачу на дом. Всё будет готово в срок.",
-                "Добрый день. Из-за [ПРИЧИНА] я вынужден задержаться. Приношу извинения за неудобства, буду через 15 минут.",
-                "Внезапно возникли проблемы с [ПРИЧИНА]. Я решаю их в ускоренном режиме, но, к сожалению, не успеваю к началу.",
-                "Вынужден сообщить, что из-за [ПРИЧИНА] я не смогу присутствовать лично. Я на связи и готов работать удаленно."
+                "Прошу прощения, я задерживаюсь. {Причина}. Постараюсь быть как можно скорее.",
+                "К сожалению, я не успеваю. {Причина}. Я на связи, если что-то срочное.",
+                "Добрый день. У меня возникла проблема: {Причина}. Приношу извинения за задержку.",
+                "Внезапно появились обстоятельства: {Причина}. Я решаю вопрос и скоро буду.",
+                "Вынужден сообщить, что задерживаюсь. {Причина}. Всё под контролем."
             ],
             2: [
-                "Я застрял в пробке из-за [ПРИЧИНА]. Уже почти на месте, но, боюсь, мне понадобится еще полчаса.",
-                "Мне пришлось срочно решать вопрос по поводу [ПРИЧИНА]. Это не было в планах, поэтому я задерживаюсь.",
-                "Я не смог вовремя выйти, потому что разбирался с [ПРИЧИНА]. Это важнее, чем казалось изначально.",
-                "К сожалению, я не смогу прийти вовремя. У меня форс-мажор с [ПРИЧИНА]. Постараюсь подключиться удаленно.",
-                "У меня случился коллапс из-за [ПРИЧИНА]. Я пытаюсь всё уладить, но время летит незаметно."
+                "Я застрял, потому что {Причина}. Уже бегу, но буду минут через 20.",
+                "У меня форс-мажор. {Причина}. Постараюсь подключиться удаленно.",
+                "Я не успеваю, так как {Причина}. Давай перенесем на чуть позже.",
+                "Мне пришлось срочно решать: {Причина}. Это заняло больше времени, чем я думал.",
+                "Я сегодня выпадаю из графика. {Причина}. Наберу, как освобожусь."
             ],
             3: [
-                "Меня похитили инопланетяне, но я договорился с ними, что вернусь к обеду. Причина: [ПРИЧИНА].",
-                "Я случайно попал в параллельную вселенную из-за [ПРИЧИНА]. Выход ищу, но там тоже пробки.",
-                "Мой кот научился открывать ноутбук и удалил мою презентацию. Всё из-за [ПРИЧИНА]. Я пытаюсь восстановить данные.",
-                "Я застрял в лифте с [ПРИЧИНА]. Пожарные уже едут, но я, кажется, успею на обед.",
-                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, вы понимаете, что это важнее отчета."
+                "Я не приду. {Причина}. Меня похитили инопланетяне, сейчас веду переговоры.",
+                "Простите, я в параллельной вселенной. {Причина}. Выход ищу, но там нет связи.",
+                "Мой кот захватил власть в квартире. {Причина}. Я забаррикадировался в ванной.",
+                "Я нашел портал в Нарнию. {Причина}. Вернусь, когда изучу местные законы.",
+                "Мне пришлось спасать мир. {Причина}. Надеюсь, вы понимаете, что это важнее."
             ]
         },
         teacher: {
             1: [
-                "Извините, я не смог подготовиться вовремя из-за [ПРИЧИНА]. Могу я сдать работу завтра? Обещаю, что всё будет идеально.",
-                "У меня возникли проблемы с [ПРИЧИНА]. Я обязательно исправлю ситуацию и принесу всё позже.",
-                "Прошу прощения, но из-за [ПРИЧИНА] я не успеваю. Я уже работаю над этим и готов показать черновик.",
-                "Я столкнулся с непредвиденными обстоятельствами ([ПРИЧИНА]). Можно ли продлить срок сдачи на один день?",
-                "К сожалению, из-за [ПРИЧИНА] я не смог завершить задание. Я готов обсудить это лично после занятия."
+                "Извините, я не успел подготовиться. {Причина}. Могу я сдать позже?",
+                "Прошу прощения, у меня возникли проблемы. {Причина}. Я всё исправлю.",
+                "Я столкнулся с непредвиденными обстоятельствами. {Причина}. Можно продлить срок?",
+                "К сожалению, я не смог завершить задание. {Причина}. Готов обсудить это лично.",
+                "У меня не получилось сдать вовремя. {Причина}. Надеюсь на ваше понимание."
             ],
             2: [
-                "Я всю ночь разбирался с [ПРИЧИНА] и просто не успел физически. Можно продлить дедлайн?",
-                "Мой интернет пропал на весь вечер из-за [ПРИЧИНА], поэтому я не смог загрузить задание.",
-                "Я был занят [ПРИЧИНА], и это заняло больше времени, чем я думал. Работа почти готова, но не совсем.",
-                "У меня возникли технические неполадки из-за [ПРИЧИНА]. Файл не сохранился, а резервной копии нет.",
-                "Мне пришлось разбираться с [ПРИЧИНА] вместо учебы. Надеюсь на ваше понимание."
+                "Я всю ночь разбирался с проблемой. {Причина}. Физически не успел.",
+                "У меня пропал интернет. {Причина}. Поэтому не смог загрузить файл.",
+                "Я был очень занят. {Причина}. Работа почти готова, но не совсем.",
+                "Возникли технические неполадки. {Причина}. Файл не сохранился.",
+                "Мне пришлось разбираться с этим: {Причина}. Поэтому я не готов."
             ],
             3: [
-                "Мой кот съел не только домашку, но и мой ноутбук. Всё из-за [ПРИЧИНА].",
-                "Я был занят предотвращением глобального кризиса, связанного с [ПРИЧИНА]. Наука на первом месте.",
-                "Я случайно удалил файл, пытаясь спасти систему от [ПРИЧИНА]. Восстановление займет время.",
-                "Меня не было, потому что я участвовал в секретном эксперименте с [ПРИЧИНА]. Подробности не разглашаются.",
-                "Я нашел портал в другое измерение из-за [ПРИЧИНА]. Теперь я изучаю квантовую физику на практике."
+                "Мой кот съел не только домашку, но и ноутбук. {Причина}. Я пытаюсь восстановить данные.",
+                "Я был занят предотвращением апокалипсиса. {Причина}. Наука на первом месте.",
+                "Я случайно удалил систему. {Причина}. Восстановление займет время.",
+                "Я участвовал в секретном эксперименте. {Причина}. Подробности не разглашаются.",
+                "Я нашел портал в другое измерение. {Причина}. Теперь я изучаю квантовую физику."
             ]
         },
         partner: {
             1: [
-                "Прости, я задержался из-за [ПРИЧИНА]. Я уже еду и куплю твои любимые цветы.",
-                "У меня возникли внезапные дела с [ПРИЧИНА], но я освобожусь через час и весь вечер твой.",
-                "Любимая(ый), я не успеваю из-за [ПРИЧИНА]. Давай перенесем ужин на завтра? Я всё компенсирую.",
-                "Прости за задержку, у меня была проблема с [ПРИЧИНА]. Я скоро буду и всё объясню.",
-                "Я очень хотел прийти, но из-за [ПРИЧИНА] планы сорвались. Давай встретимся завтра."
+                "Прости, я задерживаюсь. {Причина}. Я уже еду и куплю цветы.",
+                "У меня возникли внезапные дела. {Причина}. Освобожусь через час и весь вечер твой.",
+                "Любимая(ый), я не успеваю. {Причина}. Давай перенесем ужин на завтра?",
+                "Прости за задержку. {Причина}. Я скоро буду и всё объясню.",
+                "Я очень хотел прийти, но планы сорвались. {Причина}. Встретимся завтра."
             ],
             2: [
-                "Я задержался, потому что решал вопрос с [ПРИЧИНА]. Это было неожиданно, но я уже бегу к тебе.",
-                "Я забыл про время, потому что меня затянуло [ПРИЧИНА]. Давай встретимся позже, я извинюсь лично.",
-                "У меня был тяжелый день из-за [ПРИЧИНА]. Мне нужно немного времени, чтобы прийти в себя. Увидимся позже.",
-                "Сорян, я залип с [ПРИЧИНА]. Я знаю, что обещал, но планы изменились.",
-                "Я пытался всё успеть, но [ПРИЧИНА] съела всё мое время. Перенесем нашу встречу?"
+                "Я задержался, потому что решал вопрос. {Причина}. Это было неожиданно.",
+                "Я забыл про время. {Причина}. Давай встретимся позже, я извинюсь лично.",
+                "У меня был тяжелый день. {Причина}. Мне нужно немного времени. Увидимся позже.",
+                "Сорян, я залип. {Причина}. Я знаю, что обещал, но планы изменились.",
+                "Я пытался всё успеть, но это съело всё время. {Причина}. Перенесем?"
             ],
             3: [
-                "Я проиграл пари своему отражению в зеркале из-за [ПРИЧИНА], поэтому не смог прийти.",
-                "Мне пришлось спасать мир от [ПРИЧИНА]. Надеюсь, ты гордишься мной.",
-                "Я случайно телепортировался в прошлое, чтобы исправить [ПРИЧИНА]. Вернусь к ужину.",
-                "Мой телефон взорвался, когда я пытался решить проблему с [ПРИЧИНА]. Я жив, но без связи.",
-                "Меня похитили инопланетяне, чтобы изучить [ПРИЧИНА]. Они обещали вернуть меня к утру."
+                "Я проиграл пари отражению в зеркале. {Причина}. Поэтому не смог прийти.",
+                "Мне пришлось спасать мир. {Причина}. Надеюсь, ты гордишься мной.",
+                "Я случайно телепортировался в прошлое. {Причина}. Вернусь к ужину.",
+                "Мой телефон взорвался. {Причина}. Я жив, но без связи.",
+                "Меня похитили инопланетяне. {Причина}. Они обещали вернуть меня к утру."
             ]
         },
         friend: {
             1: [
-                "Сорян, я не смогу прийти из-за [ПРИЧИНА]. Обещаю, в следующий раз с меня причитается.",
-                "Планы резко поменялись из-за [ПРИЧИНА]. Давай перенесем на завтра?",
-                "Я не успеваю, у меня внезапно появились дела с [ПРИЧИНА]. Позже наберу.",
-                "Чувак, извини, но из-за [ПРИЧИНА] я вынужден пропустить тусовку. Обязательно наверстаем.",
-                "У меня нарисовалась проблема с [ПРИЧИНА]. Я выпадаю из графика, но скоро вернусь."
+                "Сорян, я не смогу прийти. {Причина}. В следующий раз с меня причитается.",
+                "Планы резко поменялись. {Причина}. Давай перенесем на завтра?",
+                "Я не успеваю. {Причина}. Позже наберу.",
+                "Чувак, извини, но я вынужден пропустить тусовку. {Причина}. Наверстаем.",
+                "У меня нарисовалась проблема. {Причина}. Я выпадаю из графика."
             ],
             2: [
-                "Я залип с [ПРИЧИНА] и просто забил на всё. Сорян, брат.",
-                "Не приду, у меня внезапно появились дела важнее [ПРИЧИНА].",
-                "Я сегодня пас, устал после [ПРИЧИНА]. Давай в другой раз.",
-                "Меня засосало в водоворот [ПРИЧИНА]. Я не выберусь сегодня.",
-                "Планы накрылись медным тазом из-за [ПРИЧИНА]. Я в пролете, но вы там отдохните за меня."
+                "Я залип и просто забил на всё. {Причина}. Сорян, брат.",
+                "Не приду. {Причина}. У меня внезапно появились дела важнее.",
+                "Я сегодня пас, устал. {Причина}. Давай в другой раз.",
+                "Меня засосало в водоворот событий. {Причина}. Я не выберусь сегодня.",
+                "Планы накрылись медным тазом. {Причина}. Я в пролете, но вы отдохните."
             ],
             3: [
-                "Я стал свидетелем пришествия из-за [ПРИЧИНА]. Меня теперь зовут в новый мир.",
-                "У меня сгорел телефон из-за [ПРИЧИНА], а пока я его тушил, прошла неделя.",
-                "Я нашел портал в Нарнию, пока разбирался с [ПРИЧИНА]. Останусь тут на пару дней.",
-                "Меня похитили пираты, но я сбежал. Всё из-за [ПРИЧИНА]. Скоро буду.",
-                "Я стал супергероем, моя суперсила — [ПРИЧИНА]. Сейчас спасаю город, так что не ждите."
+                "Я стал свидетелем пришествия. {Причина}. Меня теперь зовут в новый мир.",
+                "У меня сгорел телефон. {Причина}. Пока я его тушил, прошла неделя.",
+                "Я нашел портал в Нарнию. {Причина}. Останусь тут на пару дней.",
+                "Меня похитили пираты, но я сбежал. {Причина}. Скоро буду.",
+                "Я стал супергероем. {Причина}. Сейчас спасаю город, не ждите."
             ]
         },
         parent: {
             1: [
-                "Мам, пап, я задержусь из-за [ПРИЧИНА]. Я на связи, всё в порядке.",
-                "Не переживайте, я не смог приехать вовремя из-за [ПРИЧИНА], скоро буду.",
-                "Простите, что не предупредил. У меня возникли дела с [ПРИЧИНА]. Приеду позже.",
-                "У меня всё хорошо, просто задерживаюсь из-за [ПРИЧИНА]. Не волнуйтесь.",
-                "Из-за [ПРИЧИНА] я не успеваю к ужину. Обещаю приехать завтра."
+                "Мам, пап, я задержусь. {Причина}. Я на связи, всё в порядке.",
+                "Не переживайте, я не смог приехать вовремя. {Причина}. Скоро буду.",
+                "Простите, что не предупредил. {Причина}. Приеду позже.",
+                "У меня всё хорошо, просто задерживаюсь. {Причина}. Не волнуйтесь.",
+                "Я не успеваю к ужину. {Причина}. Обещаю приехать завтра."
             ],
             2: [
-                "Я просто потерял счет времени, пока разбирался с [ПРИЧИНА]. Вернусь позже.",
-                "У меня тут внезапные планы с [ПРИЧИНА]. Я предупрежу, когда освобожусь.",
-                "Я не приеду сегодня, у меня дела с [ПРИЧИНА]. Завтра обязательно наберу.",
-                "Я застрял с [ПРИЧИНА], поэтому не успеваю. Всё под контролем.",
-                "У меня изменились планы из-за [ПРИЧИНА]. Я приеду, как только смогу."
+                "Я потерял счет времени. {Причина}. Вернусь позже.",
+                "У меня внезапные планы. {Причина}. Я предупрежу, когда освобожусь.",
+                "Я не приеду сегодня. {Причина}. Завтра обязательно наберу.",
+                "Я застрял. {Причина}. Не успеваю. Всё под контролем.",
+                "У меня изменились планы. {Причина}. Я приеду, как только смогу."
             ],
             3: [
-                "Я уехал в горы искать себя из-за [ПРИЧИНА]. Со мной все в порядке, не ждите.",
-                "Мне предложили стать президентом луны из-за [ПРИЧИНА]. Сейчас подумаю.",
-                "Я нашел клад, пока разбирался с [ПРИЧИНА]. Теперь я богат и не приеду.",
-                "Я стал свидетелем НЛО, когда решал вопрос с [ПРИЧИНА]. Меня изучают.",
-                "Я решил стать монахом из-за [ПРИЧИНА]. Теперь живу в пещере и медитирую."
+                "Я уехал в горы искать себя. {Причина}. Со мной все в порядке, не ждите.",
+                "Мне предложили стать президентом луны. {Причина}. Сейчас подумаю.",
+                "Я нашел клад. {Причина}. Теперь я богат и не приеду.",
+                "Я стал свидетелем НЛО. {Причина}. Меня изучают.",
+                "Я решил стать монахом. {Причина}. Теперь живу в пещере и медитирую."
             ]
         }
     };
@@ -429,7 +424,15 @@
     let genCount = parseInt(localStorage.getItem('otmazking_count') || '0');
     document.getElementById('counter').innerText = genCount;
 
-    // --- Генерация ---
+    // Умная обработка текста
+    function formatReason(text) {
+        if (!text) return "непредвиденные обстоятельства";
+        // Делаем первую букву строчной, если это не аббревиатура
+        let formatted = text.charAt(0).toLowerCase() + text.slice(1);
+        // Убираем точку в конце, если есть
+        return formatted.replace(/\.$/, '');
+    }
+
     function generate() {
         const target = document.getElementById('target').value;
         const reasonInput = document.getElementById('reason').value.trim();
@@ -440,12 +443,12 @@
         const btn = document.getElementById('genBtn');
 
         if (!reasonInput) {
-            showToast("Напиши, что натворил! (Кратко)");
+            showToast("Напиши, что случилось!");
             return;
         }
 
         btn.disabled = true;
-        btn.innerText = "Анализируем реальность...";
+        btn.innerText = "Генерация...";
         resultBox.classList.remove('show');
 
         const levelNames = { "1": "Правдоподобно", "2": "Дерзко", "3": "Абсурдно" };
@@ -455,28 +458,29 @@
             const levelTemplates = templates[target][level];
             const randomTemplate = levelTemplates[Math.floor(Math.random() * levelTemplates.length)];
             
-            let finalText = randomTemplate.replace('[ПРИЧИНА]', reasonInput.toLowerCase());
+            // Подставляем очищенную причину
+            let finalText = randomTemplate.replace('{Причина}', formatReason(reasonInput));
+
+            // Делаем первую букву заглавной
+            finalText = finalText.charAt(0).toUpperCase() + finalText.slice(1);
 
             resultText.innerText = `«${finalText}»`;
             resultBox.classList.add('show');
             
             btn.disabled = false;
-            btn.innerText = "Сгенерировать отмазку";
+            btn.innerText = "Сгенерировать";
 
-            // Счетчик
             genCount++;
             localStorage.setItem('otmazking_count', genCount);
             document.getElementById('counter').innerText = genCount;
 
             resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 500); 
+        }, 400); 
     }
 
-    // --- Утилиты ---
     function randomReason() {
         const input = document.getElementById('reason');
         input.value = randomReasons[Math.floor(Math.random() * randomReasons.length)];
-        input.focus();
     }
 
     function copyText() {
@@ -487,7 +491,7 @@
         navigator.clipboard.writeText(cleanText).then(() => {
             btn.innerText = "✅ Готово";
             btn.classList.add('copied');
-            showToast("Скопировано в буфер!");
+            showToast("Скопировано!");
             setTimeout(() => {
                 btn.innerText = "📋 Копировать";
                 btn.classList.remove('copied');
@@ -507,7 +511,6 @@
             navigator.share(shareData).catch(() => copyText());
         } else {
             copyText();
-            showToast("Текст скопирован! Отправь другу.");
         }
     }
 
@@ -518,7 +521,7 @@
         setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    // --- Оживленный фон (Частицы) ---
+    // Оживленный фон
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -543,7 +546,6 @@
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
-
             if (this.x > width) this.x = 0;
             if (this.x < 0) this.x = width;
             if (this.y > height) this.y = 0;
@@ -575,8 +577,6 @@
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
-        
-        // Легкое свечение за мышкой
         if (mouse.x && mouse.y) {
             const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 300);
             gradient.addColorStop(0, 'rgba(255, 42, 95, 0.05)');
@@ -584,7 +584,6 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
         }
-
         particles.forEach(p => {
             p.update();
             p.draw();
@@ -602,4 +601,4 @@
     animate();
 </script>
 </body>
-    </html>
+        </html>
