@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ОТМАЗКИНГ PRO MAX | Генератор оправданий</title>
+    <title>Blenderaiz | Генератор оправданий</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -292,7 +292,7 @@
     <div class="main-wrapper">
         <div class="container">
             <div class="header">
-                <h1>ОТМАЗКИНГ</h1>
+                <h1>Blenderaiz</h1>
                 <div class="subtitle">Искусство красиво съехать</div>
             </div>
 
@@ -353,9 +353,9 @@
         </div>
 
         <div class="info-section">
-            <h3>О проекте</h3>
+            <h3>О Blenderaiz</h3>
             <p style="margin-bottom: 15px;">
-                <strong>ОТМАЗКИНГ</strong> — это твой карманный адвокат по вопросам внезапного исчезновения. Мы проанализировали тысячи реальных отмазок и собрали самую мощную базу оправданий в рунете. Теперь тебе не нужно судорожно придумывать причины в последний момент — мы сделаем это за тебя.
+                <strong>Blenderaiz</strong> — это твой карманный адвокат по вопросам внезапного исчезновения. Мы проанализировали тысячи реальных отмазок и собрали самую мощную базу оправданий в рунете. Теперь тебе не нужно судорожно придумывать причины в последний момент — мы сделаем это за тебя.
             </p>
             <div class="info-badges">
                 <div class="info-badge">⚡ <span>150+</span> готовых фраз</div>
@@ -372,7 +372,7 @@
             </ul>
 
             <div class="disclaimer">
-                <strong>⚠️ ДИСКЛЕЙМЕР:</strong> Данный сервис создан исключительно в развлекательных целях. Мы не несем ответственности за разрушенные отношения, уволенных сотрудников, испорченные оценки и косые взгляды. Используйте с умом и чувством юмора. 😉
+                <strong>⚠️ ДИСКЛЕЙМЕР:</strong> Blenderaiz создан исключительно в развлекательных целях. Мы не несем ответственности за разрушенные отношения, уволенных сотрудников, испорченные оценки и косые взгляды. Используйте с умом и чувством юмора. 😉
             </div>
         </div>
     </div>
@@ -380,7 +380,7 @@
     <div class="toast" id="toast">Скопировано!</div>
 
 <script>
-    // --- ЖИВАЯ БАЗА ДАННЫХ (Психология + Грамматика) ---
+    // --- ЖИВАЯ БАЗА ДАННЫХ ---
     const templates = {
         boss: {
             1: [
@@ -574,7 +574,6 @@
         }
     };
 
-    // Советы от ИИ (как себя вести)
     const tips = {
         1: [
             "Совет: Говори спокойным тоном, сделай виноватый вид и предложи решение.",
@@ -603,7 +602,7 @@
         "Кот разбил вазу", "Выпил лишнего", "Не успел купить подарок"
     ];
 
-    let genCount = parseInt(localStorage.getItem('otmazking_count') || '0');
+    let genCount = parseInt(localStorage.getItem('blenderaiz_count') || '0');
     document.getElementById('counter').innerText = genCount;
 
     // --- ЛОГИКА ---
@@ -642,7 +641,6 @@
             let finalText = randomTemplate.replace('{Причина}', formatReason(reasonInput));
             finalText = finalText.charAt(0).toUpperCase() + finalText.slice(1);
 
-            // Случайный совет
             const levelTips = tips[level];
             const randomTip = levelTips[Math.floor(Math.random() * levelTips.length)];
 
@@ -655,7 +653,7 @@
             btn.innerText = "Сгенерировать";
 
             genCount++;
-            localStorage.setItem('otmazking_count', genCount);
+            localStorage.setItem('blenderaiz_count', genCount);
             document.getElementById('counter').innerText = genCount;
 
             resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -687,7 +685,7 @@
     function shareText() {
         const text = document.getElementById('resultText').innerText;
         const cleanText = text.replace(/^«|»$/g, '');
-        const shareData = { title: 'ОТМАЗКИНГ', text: `Моя отмазка: ${cleanText}` };
+        const shareData = { title: 'Blenderaiz', text: `Моя отмазка: ${cleanText}` };
 
         if (navigator.share) {
             navigator.share(shareData).catch(() => copyText());
@@ -713,7 +711,6 @@
     window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
     window.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
     
-    // Для тач-устройств
     window.addEventListener('touchmove', (e) => { 
         if(e.touches.length > 0) {
             mouse.x = e.touches[0].clientX; 
@@ -729,7 +726,7 @@
             particles.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                z: Math.random() * 2 + 0.1, // Глубина для параллакса
+                z: Math.random() * 2 + 0.1,
                 size: Math.random() * 1.5 + 0.5,
                 color: Math.random() > 0.7 ? '#ff2a5f' : (Math.random() > 0.5 ? '#9d00ff' : '#ffffff')
             });
@@ -744,7 +741,6 @@
         const centerY = height / 2;
 
         particles.forEach(p => {
-            // Параллакс эффект: чем ближе частица, тем сильнее она двигается от мыши
             const dx = mouse.x - centerX;
             const dy = mouse.y - centerY;
             const offsetX = (dx / width) * p.z * 50;
@@ -753,12 +749,11 @@
             const drawX = p.x - offsetX;
             const drawY = p.y - offsetY;
 
-            // Медленное движение вверх
             p.y -= p.z * 0.3;
             if (p.y < 0) { p.y = height; p.x = Math.random() * width; }
 
             ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.z * 0.4; // Прозрачность зависит от глубины
+            ctx.globalAlpha = p.z * 0.4;
             ctx.beginPath();
             ctx.arc(drawX, drawY, p.size * p.z, 0, Math.PI * 2);
             ctx.fill();
@@ -772,4 +767,4 @@
     animate();
 </script>
 </body>
-    </html>
+                    </html>
